@@ -1,45 +1,35 @@
-# ☕ Café Static Website Hosting on AWS S3
+# AWS S3 Static Website Hosting & Disaster Recovery
 
-## 📝 Project Overview
-This project demonstrates the deployment of a secure and durable static website for a local café using **Amazon S3**. It goes beyond simple hosting by implementing cloud best practices for data protection, cost optimization, and disaster recovery.
+## Overview
+This project implements a highly available static website architecture for a café using Amazon S3. The deployment focuses on industry-standard practices for data durability, automated lifecycle management, and cross-region disaster recovery (DR).
 
+## Technical Implementation
 
+### Hosting and Security
+* **S3 Static Hosting:** Configured bucket as a web server with index document redirection.
+* **Access Control:** Deployed a Bucket Policy to enable public read access for website assets while maintaining private access for administrative tasks.
 
-## 🛠️ Key Cloud Architectures Implemented
+### Data Protection and Versioning
+* **Object Versioning:** Enabled to protect against accidental overwrites and provide point-in-time recovery for website assets.
+* **Rollback Testing:** Verified versioning by deploying CSS theme updates and performing manual rollbacks between object versions.
 
-### 1. Static Web Hosting & Public Access
-* **Hosting:** Configured an S3 bucket as a web server using `index.html` as the entry point.
-* **Security:** Implemented a **Bucket Policy** to grant `s3:GetObject` permissions to public users while maintaining bucket security.
+### Storage Lifecycle Management
+Designed and implemented lifecycle rules to optimize storage costs:
+* **Tiering:** Transition of non-current versions to S3 Standard-Infrequent Access (Standard-IA) after 30 days.
+* **Cleanup:** Automated expiration and permanent deletion of previous versions after 365 days.
 
-### 2. Data Protection (Versioning)
-* Enabled **Object Versioning** to prevent accidental deletions or overwrites.
-* Tested rollback capabilities by updating the website's theme and maintaining multiple versions of the source code.
+### Cross-Region Replication (DR Strategy)
+* **Regional Redundancy:** Configured Cross-Region Replication (CRR) from us-east-1 (Source) to us-west-2 (Destination).
+* **IAM Permissions:** Utilized `CafeRole` with specific S3 replication permissions to automate the data sync process.
 
-### 3. Cost Optimization (Lifecycle Management)
-Implemented a data retention strategy to save storage costs:
-* **Transition:** Automatically move previous versions to **S3 Standard-IA** after 30 days.
-* **Expiration:** Permanently delete old versions after 365 days.
+## Project Deliverables
 
-### 4. Disaster Recovery (Cross-Region Replication)
-* **High Availability:** Configured **CRR** to automatically replicate every upload from the Source Region (N. Virginia) to a Destination Region (Oregon).
-* **Reliability:** Ensures data safety even in the event of a regional AWS outage.
+### Architecture Diagram
+![System Architecture](./cafe%20arch.png)
 
-## 📊 System Gallery
+### Deployed Site Preview
+![Live Site](./cafe.png)
 
-### 1. Project Architecture
-![Architecture](./cafe%20arch.png)
-*Detailed architecture showing S3 replication and hosting setup.*
-
-### 2. Website Preview
-![Café Website](./cafe.png)
-*The final static website as seen by the customers.*
-
-## 📁 Technical Skills Demonstrated
-* **Storage:** Amazon S3 (Bucket Policies, Versioning, Lifecycle, CRR).
-* **IAM:** Configuring `CafeRole` for cross-region replication permissions.
-* **Automation:** Implementing lifecycle rules for cost efficiency.
-
-## 🚀 Repository Contents
-* `static-website.zip`: Original source files for the café website.
-* `index.html`: The main entry point for the static site.
-* `cafe arch.png` & `cafe.png`: Visual evidence of the project setup.
+## Repository Structure
+* `/static-website.zip`: Source code and assets.
+* `/index.html`: Main landing page with custom CSS modifications.
